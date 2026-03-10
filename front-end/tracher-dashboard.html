@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teacher Dashboard</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="icon" type="image/png" href="edu.png">
+</head>
+<body>
+
+<div class="container">
+
+    <h2 class="logo">EduVision</h2>
+
+    
+    <div class="welcome-card">
+        <div class="welcome-text">
+            <h1>Hi, Mam 👋</h1>
+            <p>Ready to start your day?</p>
+        </div>
+        <div class="welcome-img">
+            <img src="pic.png" alt="Teacher Image">
+        </div>
+    </div>
+
+  
+    <div class="cards">
+
+        
+        <div class="card">
+            <div class="card-left">
+                <span class="icon">📋</span>
+                <span>Upload Attendance</span>
+            </div>
+
+            <div>
+                <select class="dropdown" id="attendanceSelect">
+                    <option value="">Select Course</option>
+                    <option value="BCA">BCA</option>
+                    <option value="MCA">MCA</option>
+                </select>
+
+                <div class="upload-box" id="attendanceUpload">
+                    <input type="file">
+                    <button>Upload</button>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="card">
+            <div class="card-left">
+                <span class="icon">⬆️</span>
+                <span>Upload Marks</span>
+            </div>
+
+            <div>
+                <select class="dropdown" id="marksSelect">
+                    <option value="">Select Course</option>
+                    <option value="BCA">BCA</option>
+                    <option value="MCA">MCA</option>
+                </select>
+
+                <div class="upload-box" id="marksUpload">
+                    <input type="file">
+                    <button>Upload</button>
+                </div>
+            </div>
+        </div>
+
+      
+        <div class="card">
+            <div class="card-left">
+                <span class="icon">📄</span>
+                <span>Assignments</span>
+            </div>
+
+            <div>
+                <select class="dropdown" id="assignmentSelect">
+                    <option value="">Select Course</option>
+                    <option value="BCA">BCA</option>
+                    <option value="MCA">MCA</option>
+                </select>
+
+                <div class="upload-box" id="assignmentUpload">
+                    <input type="file">
+                    <button>Upload</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="result-card">
+        <h3>Result</h3>
+        <p>View and manage student results here.</p>
+    </div>
+
+    <div class="logout" onclick="goHome()">Logout</div>
+
+</div>
+
+
+<script>
+
+    const attendanceSelect = document.getElementById("attendanceSelect");
+    const marksSelect = document.getElementById("marksSelect");
+    const assignmentSelect = document.getElementById("assignmentSelect");
+
+    const attendanceUpload = document.getElementById("attendanceUpload");
+    const marksUpload = document.getElementById("marksUpload");
+    const assignmentUpload = document.getElementById("assignmentUpload");
+
+   
+    attendanceSelect.addEventListener("change", function() {
+        if (this.value === "BCA" || this.value === "MCA") {
+            attendanceUpload.style.display = "block";
+        } else {
+            attendanceUpload.style.display = "none";
+        }
+    });
+
+   
+    marksSelect.addEventListener("change", function() {
+        if (this.value === "BCA" || this.value === "MCA") {
+            marksUpload.style.display = "block";
+        } else {
+            marksUpload.style.display = "none";
+        }
+    });
+
+    
+    assignmentSelect.addEventListener("change", function() {
+        if (this.value === "BCA" || this.value === "MCA") {
+            assignmentUpload.style.display = "block";
+        } else {
+            assignmentUpload.style.display = "none";
+        }
+    });
+
+    
+    function goHome() {
+        window.location.href = "index.html"; 
+    }
+
+</script>
+
+</body>
+</html>
