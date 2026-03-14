@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+<link rel="stylesheet" href="student.css">
+<link rel="icon" type="image/png" href="edu.png">
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">EduVision</div>
+
+<!-- Welcome Section -->
+<div class="welcome-card">
+
+<div class="welcome-text">
+<h1>Hi, Barkha 👋</h1>
+<p>Check your academic performance</p>
+</div>
+
+<div class="welcome-img">
+<img src="pic.png" alt="study">
+</div>
+
+</div>
+
+
+<!-- Course Dropdown -->
+<div class="course-select">
+<select id="courseSelect">
+<option>Select Course</option>
+<option value="mca">MCA</option>
+<option value="bca">BCA</option>
+</select>
+</div>
+
+
+<!-- Subjects -->
+<div class="subjects" id="subjects">
+
+<div class="subject-card">Advanced Java</div>
+<div class="subject-card">Cloud Computing</div>
+<div class="subject-card">Machine Learning</div>
+<div class="subject-card">Software Engineering</div>
+
+</div>
+
+
+<!-- Result -->
+<div class="result-card">
+
+<h3>Performance Prediction</h3>
+
+<p>Attendance : <span id="attendance">72%</span></p>
+<p>Marks : <span id="marks">6/10</span></p>
+<p>Status : <b id="status">Good</b></p>
+
+</div>
+
+
+<div class="logout" onclick="logout()">Logout</div>
+
+</div>
+
+<script src="student.js"></script>
+
+</body>
+</html>

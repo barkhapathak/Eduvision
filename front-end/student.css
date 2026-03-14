@@ -1,0 +1,187 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",sans-serif;
+}
+
+body{
+
+height:100vh;
+overflow:hidden;
+
+background:linear-gradient(to bottom,#081a33,#0d2a57);
+
+color:#e6f0ff;
+
+}
+
+.container{
+
+height:100%;
+padding:30px 60px;
+
+display:flex;
+flex-direction:column;
+
+}
+
+/* Logo */
+
+.logo{
+
+font-size:22px;
+font-weight:600;
+margin-bottom:30px;
+
+}
+
+
+/* Welcome Card */
+
+.welcome-card{
+
+background:linear-gradient(to bottom,#274a7a,#2e5c94);
+
+border-radius:20px;
+
+padding:35px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+margin-bottom:25px;
+
+}
+
+.welcome-text h1{
+
+font-size:34px;
+margin-bottom:10px;
+
+}
+
+.welcome-text p{
+
+color:#9fb3d9;
+
+}
+
+.welcome-img img{
+
+width:150px;
+
+}
+
+
+/* Dropdown */
+
+.course-select{
+
+margin-bottom:25px;
+
+}
+
+.course-select select{
+
+background:#0f2c59;
+
+color:white;
+
+border:none;
+
+padding:10px 15px;
+
+border-radius:8px;
+
+width:200px;
+
+cursor:pointer;
+
+}
+
+
+/* Subject Cards */
+
+.subjects{
+
+display:flex;
+
+gap:30px;
+
+margin-bottom:30px;
+
+}
+
+.subject-card{
+
+flex:1;
+
+background:linear-gradient(to bottom,#274a7a,#2e5c94);
+
+border-radius:18px;
+
+padding:25px;
+
+text-align:center;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:0.2s;
+
+}
+
+.subject-card:hover{
+
+transform:scale(1.05);
+
+}
+
+
+/* Result Card */
+
+.result-card{
+
+background:linear-gradient(to bottom,#274a7a,#2e5c94);
+
+border-radius:20px;
+
+padding:30px;
+
+margin-bottom:20px;
+
+}
+
+.result-card h3{
+
+margin-bottom:15px;
+
+}
+
+.result-card p{
+
+color:#c7d7f0;
+
+margin-bottom:4px;
+
+}
+
+
+/* Logout */
+
+.logout{
+
+margin-top:auto;
+
+color:#ff4d4d;
+
+font-weight:600;
+
+cursor:pointer;
+
+}
