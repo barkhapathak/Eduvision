@@ -1,0 +1,220 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeacherSignup |EduVision</title>
+
+<link rel="icon" href="{% static 'accounts/images/logo.jpg' %}">
+
+<style>
+
+/* ---------- GLOBAL ---------- */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #021024, #052659, #5483B3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ---------- ANIMATION ---------- */
+.fade {
+    animation: fadeIn 0.9s ease forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes popUp {
+    from { opacity: 0; transform: scale(0.7); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* ---------- WRAPPER ---------- */
+.signup-wrapper {
+    width: 90%;
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(16px);
+    border-radius: 22px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+}
+
+/* ---------- LEFT PANEL ---------- */
+.left-panel {
+    background: linear-gradient(135deg, #2563eb, #60a5fa);
+    color: white;
+    padding: 50px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.left-panel img {
+    width: 85px;
+    margin: 0 auto 20px;
+    filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+}
+
+.left-panel h1 {
+    margin: 10px 0;
+    font-size: 38px;
+    letter-spacing: 1px;
+}
+
+.left-panel p {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+/* ---------- RIGHT PANEL ---------- */
+.right-panel {
+    background: linear-gradient(to bottom, white, #C1E8FF, white);
+    padding: 45px 40px;
+}
+
+.right-panel h2 {
+    color: #052659;
+    margin-bottom: 25px;
+    font-size: 28px;
+}
+
+/* ---------- FORM ---------- */
+input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s;
+}
+
+/* 🔥 INPUT FOCUS */
+input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    transform: scale(1.02);
+}
+
+/* ---------- BUTTON ---------- */
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* ---------- EXTRA LINK ---------- */
+.login-link {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.login-link a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+    margin-top: 20px;
+    color: rgba(255,255,255,0.7);
+    font-size: 13px;
+    text-align: center;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .signup-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .left-panel {
+        padding: 30px;
+    }
+
+    .right-panel {
+        padding: 30px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="signup-wrapper fade">
+
+    <!-- LEFT SIDE -->
+    <div class="left-panel">
+        <img src="{% static 'accounts/images/logo.jpg' %}" alt="Logo">
+        <h1>EduVision</h1>
+        <p>Smart Teaching Analytics Platform</p>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <div class="right-panel">
+        <h2>Create Teacher Account</h2>
+
+        <form method="POST" action="{% url 'teacher_signup' %}">
+            {% csrf_token %}
+
+            <input type="text" name="name" placeholder="Full Name" required minlength="3">
+            <input type="text" name="department" placeholder="Department" required>
+            <input type="email" name="email" placeholder="Email Address" required>
+            <input type="password" name="password" placeholder="Create Password" required minlength="6">
+
+            <button type="submit">Create Account</button>
+        </form>
+
+        <!-- EXTRA UX -->
+        <div class="login-link">
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+ EduVision © 2026
+</div>
+
+</body>
+</html>

@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduVision | Home</title>
+    <link rel="icon" href="{% static 'accounts/images/logo.jpg' %}">
+
+    <style>
+        /* CSS Integrated from your design sample */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        html, body {
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            background: linear-gradient(135deg, #081a33 0%, #0d2a57 100%);
+            color: #e6f0ff;
+        }
+
+        .main-wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            padding: 0 50px;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            height: 10vh;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 22px; }
+        .logo img { height: 55px; width: 55px; border-radius: 8px; object-fit: cover; }
+
+        /* DROPDOWN & NAV BUTTON */
+        .nav-btn {
+            text-decoration: none;
+            color: #fff;
+            background: #052695;
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .dropdown { position: relative; display: inline-block; }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: rgba(13, 42, 87, 0.95);
+            backdrop-filter: blur(10px);
+            min-width: 160px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+        }
+        .dropdown-content a:hover { background: #5483B3; }
+        .dropdown:hover .dropdown-content { display: block; }
+
+        /* CONTENT AREA */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+
+        /* HERO SECTION */
+        .hero-split {
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+        .hero-text { flex: 1; }
+        .hero-text h1 { font-size: 3rem; line-height: 1.1; margin-bottom: 15px; }
+        .highlight { color: #5483B3; }
+        .hero-text p { font-size: 16px; color: #9fb3d9; margin-bottom: 25px; }
+
+        .hero-graphic {
+            flex: 1.5;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .image-glass-frame {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 20px;
+            width: 100%;
+            height: 45vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        .image-glass-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            border-radius: 15px;
+        }
+
+        /* ROLE CARDS */
+        .role-selection {
+            height: 30vh;
+            display: flex;
+            gap: 20px;
+        }
+        .glass-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            text-decoration: none;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            transition: 0.3s;
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            border-color: #5483B3;
+        }
+        .icon { font-size: 35px; margin-bottom: 10px; }
+        .glass-card h3 { font-size: 22px; margin-bottom: 5px; }
+        .glass-card p { font-size: 13px; color: #9fb3d9; }
+
+        .predict-btn-lg {
+            background: linear-gradient(to right, #052695, #5483B3);
+            color: white;
+            border: none;
+            padding: 12px 35px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        footer {
+            height: 8vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #5483B3;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <header class="navbar">
+            <div class="logo">
+                <img src="{% static 'accounts/images/logo.jpg' %}" alt="Logo">
+                <span>EduVision</span>
+            </div>
+            <nav>
+                <div class="dropdown">
+                    <span class="nav-btn">Signup ▼</span>
+                    <div class="dropdown-content">
+                        <a href="{% url 'stu_signup' %}">Student</a>
+                        <a href="{% url 'teacher_signup' %}">Teacher</a>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <main class="content-area">
+            <section class="hero-split">
+                <div class="hero-text">
+                    <h1>Unlock Your <span class="highlight">Academic Potential</span></h1>
+                    <p>Predict your performance, identify gaps, and excel before you even step into the exam hall.</p>
+                    <button class="predict-btn-lg">Get Started</button>
+                </div>
+                
+                <div class="hero-graphic">
+                    <div class="image-glass-frame">
+                        <img src="{% static 'accounts/images/newgirl.jpg' %}" alt="Dashboard Analysis">
+                    </div>
+                </div>
+            </section>
+
+            <section class="role-selection">
+                <a href="{% url 'login' %}" class="glass-card">
+                    <span class="icon">🎓</span>
+                    <h3>Student</h3>
+                    <p>Track your progress and see your future grades.</p>
+                </a>
+                <a href="{% url 'login' %}" class="glass-card">
+                    <span class="icon">👨‍🏫</span>
+                    <h3>Teacher</h3>
+                    <p>Analyze class trends and provide early support.</p>
+                </a>
+                <a href="/admin/" class="glass-card">
+                    <span class="icon">⚙️</span>
+                    <h3>Admin</h3>
+                    <p>Manage system data and overall infrastructure.</p>
+                </a>
+            </section>
+        </main>
+
+        <footer>
+            <p>© 2026 EduVision. Predictive Analytics for Smarter Learning.</p>
+        </footer>
+    </div>
+</body>
+</html>

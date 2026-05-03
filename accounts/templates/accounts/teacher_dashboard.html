@@ -1,0 +1,462 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Teacher Dashboard| EduVision</title>
+
+<link rel="icon" href="{% static 'accounts/images/logo.jpg' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:"Segoe UI",sans-serif;
+transition:all 0.25s ease;
+}
+
+body{
+background:linear-gradient(to bottom,#081a33,#0d2a57);
+color:#e6f0ff;
+}
+
+/* CONTAINER */
+.container{
+padding:30px 60px;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.logo{
+font-size:22px;
+font-weight:600;
+}
+
+/* LOGOUT */
+.logout-btn{
+background:#dc3545;
+padding:8px 16px;
+border-radius:8px;
+}
+
+/* WELCOME */
+.card user-cardr{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(10px);
+border-radius:20px;
+padding:30px;
+margin-bottom:30px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* CARDS */
+.cards{
+display:flex;
+gap:25px;
+margin-bottom:40px;
+flex-wrap:wrap;
+}
+
+.card{
+flex:1;
+min-width:260px;
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(12px);
+border-radius:18px;
+padding:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+margin-bottom: 45px;
+}
+
+.card h3{
+margin-bottom:15px;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+/* DROPDOWN */
+.dropdown{
+width:100%;
+background:#0f2c59;
+color:white;
+padding:10px;
+border-radius:8px;
+margin-bottom:12px;
+border:none;
+}
+
+/* UPLOAD BOX */
+.upload-box{
+display:none;
+margin-top:12px;
+padding:12px;
+background:rgba(255,255,255,0.05);
+border-radius:10px;
+animation:fadeUp 0.3s ease;
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(10px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+input[type="file"]{
+margin-bottom:10px;
+}
+
+/* BUTTON */
+button{
+background:linear-gradient(135deg,#4f8cff,#6ed0ff);
+border:none;
+padding:8px 14px;
+border-radius:8px;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* PREDICT BUTTON */
+.predict-container{
+text-align:center;
+margin-top:30px;
+}
+
+.predict-btn{
+background:#28a745;
+padding:12px 25px;
+font-size:16px;
+border-radius:10px;
+}
+
+/* RESULT SECTION */
+.result-section{
+margin-top:30px;
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.result-box{
+flex:1;
+min-width:250px;
+padding:20px;
+border-radius:15px;
+}
+
+.result-box h3{
+margin-bottom:12px;
+}
+
+/* COLOR CODING */
+.excellent-box{
+background:linear-gradient(135deg,#28a745,#4cd964);
+}
+
+.average-box{
+background:linear-gradient(135deg,#ffc107,#ffdd57);
+color:black;
+}
+
+.poor-box{
+background:linear-gradient(135deg,#dc3545,#ff6b6b);
+}
+
+/* CHART */
+canvas{
+margin-top:20px;
+background:rgba(255,255,255,0.05);
+border-radius:15px;
+padding:10px;
+}
+
+/* FOOTER */
+.footer{
+text-align:center;
+margin-top:40px;
+padding:20px;
+font-size:13px;
+color:#b8cae6;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.container{padding:20px;}
+.cards{flex-direction:column;}
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 30px 35px;          /* ⬅️ bigger spacing */
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* TEXT */
+.user-text h1 {
+    margin: 0;
+    font-size: 28px;            /* ⬅️ bigger heading */
+}
+
+.user-text p {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #cbd5e1;
+}
+
+/* IMAGE */
+.user-img {
+    width: 100px;               /* ⬅️ bigger image */
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 3px solid white;    /* ⬅️ nice highlight */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HEADER -->
+<div class="header">
+<h2 class="logo">EduVision</h2>
+
+<form method="POST" action="{% url 'logout' %}">
+{% csrf_token %}
+<button class="logout-btn">Logout</button>
+</form>
+</div>
+<div class="card user-card">
+    
+    <div class="user-text">
+        <h1>Hi, {{ request.user.first_name }} 👋</h1>
+        <p>Upload student data & analyze performance instantly</p>
+        <p id="greeting"></p>
+    </div>
+
+    <img src="{% static 'accounts/images/girl.jpeg' %}" class="user-img">
+
+</div>
+<script>
+const hour = new Date().getHours();
+let text = "Welcome back!";
+
+if(hour < 12) text = "🌅 Good Morning!";
+else if(hour < 18) text = "☀️ Good Afternoon!";
+else text = "🌙 Good Evening!";
+
+document.getElementById("greeting").innerText = text;
+</script>
+
+<div class="cards">
+
+<!-- MARKS -->
+<div class="card">
+<h3>📊 Upload Marks</h3>
+<form method="POST" action="{% url 'upload_marks' %}" enctype="multipart/form-data">
+{% csrf_token %}
+
+<select name="course" id="marksSelect" class="dropdown" required>
+<option value="">Select Course</option>
+<option value="BCA">BCA</option>
+<option value="MCA">MCA</option>
+</select>
+
+<select name="subject" class="dropdown" required>
+<option value="">Select Subject</option>
+<option value="DSA">DSA</option>
+<option value="DBMS">DBMS</option>
+<option value="ML">ML</option>
+</select>
+
+<div class="upload-box" id="marksUpload">
+<input type="file" name="file" accept=".xlsx" required>
+<button type="submit">Upload</button>
+</div>
+</form>
+</div>
+
+<!-- ATTENDANCE -->
+<div class="card">
+<h3>📅 Upload Attendance</h3>
+<form method="POST" action="{% url 'upload_attendance' %}" enctype="multipart/form-data">
+{% csrf_token %}
+
+<select name="course" id="attendanceSelect" class="dropdown" required>
+<option value="">Select Course</option>
+<option value="BCA">BCA</option>
+<option value="MCA">MCA</option>
+</select>
+
+<select name="subject" class="dropdown" required>
+<option value="">Select Subject</option>
+<option value="DSA">DSA</option>
+<option value="DBMS">DBMS</option>
+<option value="ML">ML</option>
+</select>
+
+<div class="upload-box" id="attendanceUpload">
+<input type="file" name="file" accept=".xlsx" required>
+<button type="submit">Upload</button>
+</div>
+</form>
+</div>
+
+<!-- ASSIGNMENT -->
+<div class="card">
+<h3>📝 Upload Assignment</h3>
+<form method="POST" action="{% url 'upload_assignment' %}" enctype="multipart/form-data">
+{% csrf_token %}
+
+<select name="course" id="assignmentSelect" class="dropdown" required>
+<option value="">Select Course</option>
+<option value="BCA">BCA</option>
+<option value="MCA">MCA</option>
+</select>
+
+<select name="subject" class="dropdown" required>
+<option value="">Select Subject</option>
+<option value="DSA">DSA</option>
+<option value="DBMS">DBMS</option>
+<option value="ML">ML</option>
+</select>
+
+<div class="upload-box" id="assignmentUpload">
+<input type="file" name="file" accept=".xlsx" required>
+<button type="submit">Upload</button>
+</div>
+</form>
+</div>
+
+</div>
+
+<!-- PREDICT -->
+<div class="predict-container">
+<form method="POST">
+{% csrf_token %}
+
+<select name="course_subject_id" required>
+    <option value="">-- Select Subject --</option>
+    {% for cs in course_subjects %}
+        <option value="{{ cs.id }}">
+            {{ cs.course.course_name }} - {{ cs.subject.subject_name }}
+        </option>
+    {% endfor %}
+</select>
+
+<button type="submit" class="predict-btn">🚀 See Student Performance</button>
+</form>
+</div>
+
+{% if show_result %}
+<div id="resultSection">
+
+<p style="margin-top:10px; color:#ccc;">
+📊 Based on uploaded data, here's the performance breakdown:
+</p>
+
+<h2 style="margin-top:30px;">📊 Student Performance Analytics</h2>
+
+<canvas id="performanceChart"></canvas>
+
+<div class="result-section">
+
+<div class="result-box excellent-box">
+<h3>🌟 Excellent</h3>
+{% for s in excellent %}
+<p>{{ s }}</p>
+{% empty %}<p>No students</p>{% endfor %}
+</div>
+
+<div class="result-box average-box">
+<h3>📊 Average</h3>
+{% for s in average %}
+<p>{{ s }}</p>
+{% empty %}<p>No students</p>{% endfor %}
+</div>
+
+<div class="result-box poor-box">
+<h3>⚠️ Needs Attention</h3>
+{% for s in poor %}
+<p><b>{{ s.name }}</b> → {{ s.reason }}</p>
+{% empty %}
+<p>No students</p>
+{% endfor %}
+</div>
+
+</div>
+</div>
+
+<script>
+new Chart(document.getElementById('performanceChart'), {
+type: 'bar',
+data: {
+labels: ['Excellent','Average','Poor'],
+datasets: [{
+label: 'Students',
+data: [{{ excellent_count }},{{ average_count }},{{ poor_count }}]
+}]
+},
+options:{
+plugins:{legend:{labels:{color:"#fff"}}},
+scales:{
+x:{ticks:{color:"#ccc"}},
+y:{ticks:{color:"#ccc"},beginAtZero:true}
+}
+}
+});
+
+// 🔥 auto scroll
+document.getElementById("resultSection").scrollIntoView({behavior:"smooth"});
+</script>
+
+{% endif %}
+
+<div class="footer">
+ EduVision © 2026
+</div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+function toggle(selectId, boxId){
+document.getElementById(selectId).addEventListener("change",function(){
+document.getElementById(boxId).style.display = this.value ? "block":"none";
+});
+}
+
+toggle("marksSelect","marksUpload");
+toggle("attendanceSelect","attendanceUpload");
+toggle("assignmentSelect","assignmentUpload");
+
+});
+</script>
+
+</body>
+</html>

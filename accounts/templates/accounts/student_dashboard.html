@@ -1,0 +1,423 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Dashboard|EduVision</title>
+
+<link rel="icon" href="{% static 'accounts/images/logo.jpg' %}">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+background:linear-gradient(to bottom,#081a33,#0d2a57);
+color:#e6f0ff;
+font-family:"Segoe UI";
+margin:0;
+}
+*{transition:all 0.25s ease;}
+
+.container{padding:30px 60px;}
+.logo{font-size:24px;font-weight:700;margin-bottom:30px;}
+
+.card{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(12px);
+border-radius:18px;
+padding:22px;
+margin-bottom:25px;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+animation:fadeUp 0.5s ease;
+}
+.card:hover{transform:translateY(-4px);}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(15px);}
+to{opacity:1;transform:translateY(0);}
+}
+
+/* SUBJECTS */
+.subjects{
+display:flex;
+gap:12px;
+flex-wrap:wrap;
+margin:15px 0 25px;
+}
+.subject-card{
+background:linear-gradient(135deg,#2e5c94,#3c78c4);
+padding:10px 16px;
+border-radius:20px;
+font-size:13px;
+}
+
+/* PERFORMANCE */
+.performance{
+padding:10px 22px;
+border-radius:25px;
+font-weight:600;
+font-size:14px;
+}
+.excellent{background:#28a745;}
+.average{background:#ffc107;color:black;}
+.poor{background:#dc3545;}
+
+/* ALERT */
+.alert{
+background:linear-gradient(135deg,#ff4d4d,#ff6b6b);
+padding:14px;
+border-radius:12px;
+margin:20px 0;
+}
+
+/* TABLE */
+.table-wrapper{overflow-x:auto;}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+color:black;
+border-radius:12px;
+overflow:hidden;
+}
+
+th{
+background:#052659;
+color:white;
+cursor:pointer;
+}
+
+th,td{
+padding:12px;
+text-align:center;
+border:1px solid #ddd;
+}
+
+tr:hover{background:#f1f5ff;}
+
+/* RESTORED COLOR GRADING */
+.weak{background:#ffe5e5;}
+.strong{background:#e6ffe6;font-weight:bold;}
+
+/* BUTTON */
+button{
+padding:10px 18px;
+border-radius:10px;
+background:linear-gradient(135deg,#4f8cff,#6ed0ff);
+border:none;
+color:white;
+cursor:pointer;
+margin-top:10px;
+}
+button:hover{
+transform:translateY(-2px);
+box-shadow:0 6px 15px rgba(0,0,0,0.3);
+}
+
+/* CHAT BUTTON */
+#chatToggle{
+position:fixed;
+bottom:20px;
+right:20px;
+width:60px;
+height:60px;
+background:linear-gradient(135deg,#4f8cff,#6ed0ff);
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+cursor:pointer;
+box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* CHAT BOX */
+.chatbot{
+position:fixed;
+bottom:95px;
+right:20px;
+width:320px;
+max-height:450px;
+background:#1e1e2f;
+border-radius:18px;
+padding:15px;
+display:none;
+flex-direction:column;
+box-shadow:0 15px 40px rgba(0,0,0,0.5);
+animation:fadeUp 0.3s ease;
+}
+
+.chatbox{
+height:260px;
+overflow-y:auto;
+background:#111827;
+border-radius:10px;
+padding:12px;
+font-size:13px;
+margin-bottom:10px;
+}
+
+.chatbox p{margin:6px 0;}
+
+.quick-btns{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+}
+.quick-btns button{
+flex:1;
+padding:8px;
+font-size:12px;
+}
+
+/* FOOTER */
+.footer{
+text-align:center;
+padding:20px;
+margin-top:25px;
+font-size:13px;
+color:#b8cae6;
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+.container{padding:20px;}
+}
+
+.user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 30px 35px;          /* ⬅️ bigger spacing */
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+/* TEXT */
+.user-text h1 {
+    margin: 0;
+    font-size: 28px;            /* ⬅️ bigger heading */
+}
+
+.user-text p {
+    margin-top: 8px;
+    font-size: 16px;
+    color: #cbd5e1;
+}
+
+/* IMAGE */
+.user-img {
+    width: 100px;               /* ⬅️ bigger image */
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 3px solid white;    /* ⬅️ nice highlight */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="logo">EduVision</div>
+
+<div class="card user-card">
+    
+    <div class="user-text">
+        <h1>Hi, {{ request.user.first_name }} 👋</h1>
+        <p>Your academic dashboard</p>
+        <p id="greeting"></p>
+    </div>
+
+    <img src="{% static 'accounts/images/girl.jpeg' %}" class="user-img">
+
+</div>
+<script>
+const hour = new Date().getHours();
+let text = "Welcome back!";
+
+if(hour < 12) text = "🌅 Good Morning!";
+else if(hour < 18) text = "☀️ Good Afternoon!";
+else text = "🌙 Good Evening!";
+
+document.getElementById("greeting").innerText = text;
+</script>
+
+{% if weak_subjects %}
+<div class="alert">
+⚠ Weak Subjects:
+{% for w in weak_subjects %}
+<b>{{ w.subject }}</b>{% if not forloop.last %}, {% endif %}
+{% endfor %}
+</div>
+{% endif %}
+
+<div class="subjects">
+{% for d in data %}
+<div class="subject-card">{{ d.subject }}</div>
+{% endfor %}
+</div>
+
+<!-- FIXED SPACING HERE -->
+<div class="card" style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+<div>
+<h3>📈 Your Performance</h3>
+<p style="color:#b8cae6;">Overall academic status</p>
+</div>
+<div class="performance {% if category == 'Excellent' %}excellent{% elif category == 'Average' %}average{% else %}poor{% endif %}">
+{{ category }}
+</div>
+</div>
+
+<div class="card">
+<h3>📊 Quick Insights</h3>
+<p>🏆 Rank: <b>{{ rank }}</b></p>
+<p>📊 Class Avg: <b>{{ class_avg|floatformat:2 }}</b></p>
+</div>
+
+<!-- IMPROVED SECTIONS -->
+<div class="card">
+<h3>🧠 Performance Insight</h3>
+<p style="line-height:1.6;color:#cfe3ff;">{{ reason }}</p>
+</div>
+
+<div class="card">
+<h3>📊 Performance Overview</h3>
+<canvas id="studentChart"></canvas>
+</div>
+
+<div class="card table-wrapper">
+<table>
+<tr>
+<th onclick="sortTable(0)">Subject</th>
+<th onclick="sortTable(1)">Marks</th>
+<th onclick="sortTable(2)">Attendance</th>
+<th onclick="sortTable(3)">Assignment</th>
+</tr>
+
+{% for d in data %}
+<tr class="{% if d.marks < 40 %}weak{% elif d.marks > 75 %}strong{% endif %}">
+<td>{{ d.subject }}</td>
+<td>{{ d.marks }}</td>
+<td>{{ d.attendance }}</td>
+<td>{{ d.assignment }}</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+
+<div class="card">
+<h3>📌 Smart Suggestions</h3>
+<ul style="line-height:1.7;">
+{% for s in suggestions %}
+<li>👉 {{ s }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<div class="card">
+<h3>💬 AI Feedback</h3>
+<p style="line-height:1.6;color:#d6e6ff;">{{ message }}</p>
+</div>
+
+<form method="POST" action="{% url 'logout' %}">
+{% csrf_token %}
+<button type="submit">Logout</button>
+</form>
+
+<div class="footer">
+ EduVision © 2026
+</div>
+
+</div>
+
+<!-- CHAT -->
+<div id="chatToggle">💬</div>
+
+<div class="chatbot" id="chatbotBox">
+<h4>🤖 AI Assistant</h4>
+
+<div id="chatbox" class="chatbox"></div>
+
+<div class="quick-btns">
+<button onclick="quickMsg('performance')">📊</button>
+<button onclick="quickMsg('weak subjects')">⚠</button>
+<button onclick="quickMsg('improve')">🚀</button>
+<button onclick="quickMsg('attendance')">📅</button>
+</div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function(){
+
+const chatbox = document.getElementById("chatbox");
+const toggleBtn = document.getElementById("chatToggle");
+const chatbotBox = document.getElementById("chatbotBox");
+
+chatbox.innerHTML += "<p><b>Bot:</b> Hi! Tap below for insights 🚀</p>";
+
+toggleBtn.addEventListener("click", function(){
+chatbotBox.style.display = (chatbotBox.style.display === "flex") ? "none" : "flex";
+});
+
+window.quickMsg = function(text){
+chatbox.innerHTML += `<p><b>You:</b> ${text}</p>`;
+
+fetch("/chatbot/",{
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded",
+"X-CSRFToken":"{{ csrf_token }}"
+},
+body:"message="+text
+})
+.then(res=>res.json())
+.then(data=>{
+chatbox.innerHTML += `<p><b>Bot:</b> ${data.response}</p>`;
+chatbox.scrollTop = chatbox.scrollHeight;
+});
+};
+
+window.sortTable = function(n){
+let table = document.querySelector("table");
+let rows = Array.from(table.rows).slice(1);
+
+rows.sort((a,b)=>a.cells[n].innerText - b.cells[n].innerText);
+rows.forEach(r=>table.appendChild(r));
+};
+
+new Chart(document.getElementById('studentChart'), {
+type: 'bar',
+data: {
+labels: {{ subjects|safe }},
+datasets: [
+{ label: 'Marks', data: {{ marks_data|safe }} },
+{ label: 'Attendance', data: {{ attendance_data|safe }} },
+{ label: 'Assignment', data: {{ assignment_data|safe }} }
+]
+},
+options: {
+responsive: true,
+plugins: {
+legend: { labels: { color: "#edf4ff" } }
+},
+scales: {
+x: { ticks: { color: "#b8cae6" } },
+y: { ticks: { color: "#b8cae6" }, beginAtZero: true }
+}
+}
+});
+
+});
+</script>
+
+</body>
+</html>
